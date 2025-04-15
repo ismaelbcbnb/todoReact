@@ -1,4 +1,4 @@
-import React, { createContext, useEffect } from "react";
+import React, { createContext, useEffect, useState } from "react";
 import { TodoContextType } from "./TodoContextType";
 import { title } from "process";
 import { Todo } from "../models/Todo";
@@ -14,11 +14,7 @@ export const TodoContext = createContext<TodoContextType>({
 
 const TodoProvider = (props: any) => { 
     
-    const [todos, setTodos] = React.useState<Todo[]>([
-        { id: 1, title: "Estudar React", done: false },
-        { id: 2, title: "Estudar TypeScript", done: false },
-        { id: 3, title: "Estudar JavaScript", done: false },
-    ]);
+    const [todos, setTodos] = useState<Todo[]>(get);
 
     useEffect(() => {
         save(todos);
