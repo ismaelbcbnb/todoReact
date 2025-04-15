@@ -25,7 +25,6 @@ const AddTodo = () => {
     const onSubmit = (data: AddTodoForm, e: any) => {
         addTodo(data.title);
         e.target.reset();
-        console.log('Tarefa adicionada:', data.title);
         navigate('/')
     }
 
