@@ -1,7 +1,8 @@
-import React, { createContext } from "react";
+import React, { createContext, useEffect } from "react";
 import { TodoContextType } from "./TodoContextType";
 import { title } from "process";
 import { Todo } from "../models/Todo";
+import { get, save } from "../services/TodoService";
 
 
 export const TodoContext = createContext<TodoContextType>({
@@ -13,16 +14,35 @@ export const TodoContext = createContext<TodoContextType>({
 
 const TodoProvider = (props: any) => { 
     
-    const todos = [ 
-        {id: 1, title: 'Ir ao supermercado', done: true},
-        {id: 2, title: 'Ir à academia', done: false}
-    ];
+    const [todos, setTodos] = React.useState<Todo[]>([
+        { id: 1, title: "Estudar React", done: false },
+        { id: 2, title: "Estudar TypeScript", done: false },
+        { id: 3, title: "Estudar JavaScript", done: false },
+    ]);
 
-    const addTodo = (title:string) => {console.log('Adicionou ' + title)}
+    useEffect(() => {
+        save(todos);
+    }, [todos]);
 
-    const removeTodo = (todo: Todo) => {console.log('Removey ' + todo.title)}
+    const addTodo = (title:string) => {
+        const todo: Todo = {
+            id: todos.length + 1,
+            title: title,
+            done: false
+        }
+        setTodos([...todos, todo]);
+    }
 
-    const toggle = (todo: Todo) => {console.log('Alterou ' + todo.title)}
+    const removeTodo = (todo: Todo) => {
+        const index = todos.indexOf(todo);
+        setTodos(todos.filter((_, i) => i !== index));
+    }
+
+    const toggle = (todo: Todo) => {
+        const index = todos.indexOf(todo);
+        todos[index].done = !todos[index].done;
+        setTodos([...todos]);
+    }
 
     return(
         <TodoContext.Provider value ={{todos, addTodo, removeTodo, toggle}}>
